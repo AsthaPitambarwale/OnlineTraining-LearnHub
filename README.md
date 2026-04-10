@@ -182,6 +182,13 @@ GET /payments
 POST /payments
 ```
 
+### RozarPay
+
+```
+POST /create-order
+POST /verify
+```
+
 ### Progress
 
 ```
