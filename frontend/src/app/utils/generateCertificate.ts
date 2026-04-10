@@ -7,123 +7,119 @@ export async function generateCertificate(
 ) {
   const pdf = new jsPDF("landscape");
 
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const pageHeight = pdf.internal.pageSize.getHeight();
+  const w = pdf.internal.pageSize.getWidth();
+  const h = pdf.internal.pageSize.getHeight();
 
   const certId = "CERT-" + Date.now();
 
-  // 🟡 BACKGROUND WATERMARK
+  // ===== BACKGROUND WATERMARK =====
   pdf.setTextColor(230);
-  pdf.setFontSize(100);
-  pdf.text("LEARNHUB", pageWidth / 2, pageHeight / 2, {
+  pdf.setFontSize(90);
+  pdf.text("LEARNHUB", w / 2, h / 2, {
     align: "center",
     angle: 45,
   });
 
-  // 🔵 BORDER
+  // ===== BORDER =====
   pdf.setDrawColor(0, 102, 204);
-  pdf.setLineWidth(3);
-  pdf.rect(10, 10, pageWidth - 20, pageHeight - 20);
+  pdf.setLineWidth(2);
+  pdf.rect(12, 12, w - 24, h - 24);
 
-  pdf.setLineWidth(1);
-  pdf.rect(15, 15, pageWidth - 30, pageHeight - 30);
+  pdf.setLineWidth(0.8);
+  pdf.rect(18, 18, w - 36, h - 36);
 
-  // 🏷 LOGO TEXT (replace with image if you want)
+  // ===== HEADER =====
   pdf.setFont("Times", "Bold");
-  pdf.setFontSize(22);
+  pdf.setFontSize(20);
   pdf.setTextColor(0, 102, 204);
-  pdf.text("LearnHub Academy", 30, 30);
+  pdf.text("LearnHub Academy", 25, 30);
 
-  // 🎓 TITLE
-  pdf.setFontSize(36);
+  // ===== TITLE =====
+  pdf.setFontSize(34);
   pdf.setTextColor(0, 51, 102);
-  pdf.text("CERTIFICATE OF COMPLETION", pageWidth / 2, 55, {
+  pdf.text("CERTIFICATE OF COMPLETION", w / 2, 55, {
     align: "center",
   });
 
-  // Subtitle
-  pdf.setFontSize(18);
-  pdf.setTextColor(80);
-  pdf.text("This certificate is proudly awarded to", pageWidth / 2, 80, {
-    align: "center",
-  });
-
-  // 👤 NAME
-  pdf.setFont("Times", "Bold");
-  pdf.setFontSize(30);
-  pdf.setTextColor(0);
-  pdf.text(userName, pageWidth / 2, 100, { align: "center" });
-
-  pdf.line(pageWidth / 2 - 60, 105, pageWidth / 2 + 60, 105);
-
-  // 📘 TEXT
+  // ===== SUBTITLE =====
   pdf.setFont("Times", "Normal");
-  pdf.setFontSize(18);
+  pdf.setFontSize(16);
+  pdf.setTextColor(80);
+  pdf.text("This certificate is proudly awarded to", w / 2, 75, {
+    align: "center",
+  });
+
+  // ===== NAME =====
+  pdf.setFont("Times", "Bold");
+  pdf.setFontSize(28);
+  pdf.setTextColor(0);
+  pdf.text(userName, w / 2, 95, { align: "center" });
+
+  pdf.setDrawColor(0, 102, 204);
+  pdf.line(w / 2 - 50, 100, w / 2 + 50, 100);
+
+  // ===== COURSE TEXT =====
+  pdf.setFont("Times", "Normal");
+  pdf.setFontSize(16);
   pdf.text(
     "for successfully completing the certified course",
-    pageWidth / 2,
-    125,
+    w / 2,
+    120,
     { align: "center" }
   );
 
-  // 📚 COURSE TITLE
+  // ===== COURSE TITLE =====
   pdf.setFont("Times", "Bold");
-  pdf.setFontSize(26);
+  pdf.setFontSize(22);
   pdf.setTextColor(0, 102, 204);
-  pdf.text(courseTitle, pageWidth / 2, 145, {
+
+  // handle long title wrapping
+  const splitTitle = pdf.splitTextToSize(courseTitle, 180);
+  pdf.text(splitTitle, w / 2, 140, { align: "center" });
+
+  // ===== LEFT FOOTER =====
+  pdf.setFontSize(12);
+  pdf.setTextColor(0);
+  pdf.text(`Date: ${new Date().toLocaleDateString()}`, 30, h - 35);
+  pdf.text(`Certificate ID: ${certId}`, 30, h - 20);
+
+  // ===== SIGNATURE (RIGHT SIDE CLEAN) =====
+  const sigX = w - 90;
+  const sigY = h - 35;
+
+  pdf.line(sigX - 20, sigY - 5, sigX + 40, sigY - 5);
+  pdf.setFontSize(12);
+  pdf.text("Authorized Signature", sigX + 10, sigY + 5, {
     align: "center",
   });
 
-  // 📅 DATE
-  pdf.setFontSize(14);
-  pdf.setTextColor(0);
-  pdf.text(
-    `Date: ${new Date().toLocaleDateString()}`,
-    40,
-    pageHeight - 40
-  );
+  // ===== QR CODE (BOTTOM RIGHT, NO OVERLAP) =====
+  const qrData = `https://yourdomain.com/verify/${certId}`;
+  const qrImage = await QRCode.toDataURL(qrData);
 
-  // 🆔 CERTIFICATE ID
-  pdf.text(`Certificate ID: ${certId}`, 40, pageHeight - 25);
+  pdf.addImage(qrImage, "PNG", w - 70, h - 90, 40, 40);
 
-  // ✍️ SIGNATURE
-  pdf.text("Authorized Signature", pageWidth - 80, pageHeight - 40);
-  pdf.line(
-    pageWidth - 100,
-    pageHeight - 45,
-    pageWidth - 40,
-    pageHeight - 45
-  );
+  pdf.setFontSize(10);
+  pdf.text("Scan to verify", w - 50, h - 45, { align: "center" });
 
-  // 🏅 GOLD SEAL (simple circle)
+  // ===== GOLD SEAL (TOP RIGHT, PROPERLY PLACED) =====
+  const sealX = w - 60;
+  const sealY = 70;
+
   pdf.setDrawColor(212, 175, 55);
   pdf.setFillColor(255, 215, 0);
-  pdf.circle(pageWidth - 60, 60, 15, "FD");
+  pdf.circle(sealX, sealY, 14, "FD");
 
   pdf.setFontSize(10);
   pdf.setTextColor(120, 90, 0);
-  pdf.text("Verified", pageWidth - 60, 62, { align: "center" });
+  pdf.text("Verified", sealX, sealY + 3, { align: "center" });
 
-  // 🔐 QR CODE (verification link)
-  const qrData = `https://yourdomain.com/verify/${certId}`;
-
-  const qrImage = await QRCode.toDataURL(qrData);
-
-  pdf.addImage(qrImage, "PNG", pageWidth - 70, pageHeight - 80, 40, 40);
-
-  pdf.setFontSize(10);
-  pdf.text("Scan to verify", pageWidth - 50, pageHeight - 35, {
-    align: "center",
-  });
-
-  // 🏁 FOOTER
+  // ===== FOOTER CENTER =====
   pdf.setFont("Times", "Italic");
-  pdf.setFontSize(14);
+  pdf.setFontSize(12);
   pdf.setTextColor(120);
-  pdf.text("LearnHub Academy", pageWidth / 2, pageHeight - 15, {
-    align: "center",
-  });
+  pdf.text("LearnHub Academy", w / 2, h - 10, { align: "center" });
 
-  // 💾 SAVE
+  // ===== SAVE =====
   pdf.save(`${courseTitle}-certificate.pdf`);
 }
