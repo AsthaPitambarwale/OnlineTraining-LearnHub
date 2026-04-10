@@ -20,11 +20,10 @@ export class DataService {
 
   static notify(key: string) {
     if (!this.listeners[key]) return;
-
     this.listeners[key].forEach((cb) => cb());
   }
 
-  // COURSES
+  // ================= COURSES =================
   static async getCourses() {
     const res = await fetch(`${API}/courses`);
     return res.json();
@@ -60,7 +59,7 @@ export class DataService {
     this.notify("courses");
   }
 
-  // MODULES
+  // ================= MODULES =================
   static async updateModules(courseId: string, modules: any[]) {
     const res = await fetch(`${API}/courses/${courseId}/modules`, {
       method: "PUT",
@@ -72,7 +71,7 @@ export class DataService {
     return res.json();
   }
 
-  // USERS
+  // ================= USERS =================
   static async getUsers() {
     const res = await fetch(`${API}/users`);
     return res.json();
@@ -97,24 +96,14 @@ export class DataService {
     this.notify("users");
   }
 
-  // PAYMENTS
+  // ================= PAYMENTS =================
+
   static async getPayments() {
     const res = await fetch(`${API}/payments`);
     return res.json();
   }
 
-  static async addPayment(payment: any) {
-    const res = await fetch(`${API}/payments`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payment),
-    });
-
-    this.notify("payments");
-    return res.json();
-  }
-
-  // ENROLLMENTS
+  // ================= ENROLLMENTS =================
   static async getEnrollments() {
     const res = await fetch(`${API}/enrollments`);
     return res.json();
@@ -136,13 +125,10 @@ export class DataService {
     return res.json();
   }
 
-  // PROGRESS
-
+  // ================= PROGRESS =================
   static async getCourseProgress(userId: string, courseId: string) {
     const res = await fetch(`${API}/progress/${userId}/${courseId}`);
-
     if (!res.ok) return null;
-
     return res.json();
   }
 
@@ -164,9 +150,7 @@ export class DataService {
     });
 
     const data = await res.json();
-
     this.notify("progress");
-
     return data;
   }
 
@@ -190,14 +174,11 @@ export class DataService {
 
   static async calculateProgress(userId: string, courseId: string) {
     const progress = await this.getCourseProgress(userId, courseId);
-
     if (!progress) return 0;
 
     const completedLessons = progress.completedLessons?.length || 0;
 
-    // ✅ use existing method
     const courses = await this.getCourses();
-
     const course = courses.find((c: any) => String(c.id) === String(courseId));
 
     if (!course) return 0;
@@ -216,8 +197,8 @@ export class DataService {
 
     return Math.round((completedLessons / totalLessons) * 100);
   }
-  // ANALYTICS
 
+  // ================= ANALYTICS =================
   static async getAnalytics() {
     const [courses, users, payments] = await Promise.all([
       this.getCourses(),
