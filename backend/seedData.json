@@ -1,0 +1,82 @@
+{
+  "courses": [
+    {
+      "id": "1775725151104",
+      "title": "Complete Web Development Bootcamp",
+      "description": "Learn full-stack web development from scratch. Master HTML, CSS, JavaScript, React, Node.js, and more. Build real-world projects and become a professional web developer.",
+      "price": 4999,
+      "instructor": "Sarah Jhonson",
+      "category": "Web Development",
+      "thumbnail": "https://images.unsplash.com/photo-1557324232-b8917d3c3dcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWIlMjBkZXZlbG9wbWVudCUyMGNvZGluZyUyMGNvbXB1dGVyfGVufDF8fHx8MTc3MzcwMzEzN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "duration": "42 hours",
+      "rating": 4.8,
+      "studentsEnrolled": 12450,
+      "modules": "[{\"id\":\"m_1775725163703\",\"title\":\"Introduction to Web Development\",\"lessons\":[{\"id\":\"l_1775725192171\",\"title\":\"HTML\",\"duration\":\"02:06:00\",\"videoUrl\":\"https://youtu.be/HcOc7P5BMi4?si=jLzwkP8pGQ-b31HH\",\"isLocked\":true},{\"id\":\"l_1775725227687\",\"title\":\"CSS\",\"duration\":\"07:18:23\",\"videoUrl\":\"https://youtu.be/ESnrn1kAD4E?si=ivDwsgA9JU4iv8mI\",\"isLocked\":true},{\"id\":\"l_1775725261871\",\"title\":\"Complete Git and Github\",\"duration\":\"01:14:17\",\"videoUrl\":\"https://youtu.be/Ez8F0nW6S-w?si=IK_UoCIocUKnTJIq\",\"isLocked\":true}]},{\"id\":\"m_1775725272570\",\"title\":\"Introduction to JavaScript\",\"lessons\":[]}]"
+    },
+    {
+      "id": "1775725347841",
+      "title": "Python for Data Science",
+      "description": "Master Python programming for data science and machine learning. Learn pandas, NumPy, matplotlib, and scikit-learn. Work on real data analysis projects.",
+      "price": 5499,
+      "instructor": "Dr. Michael Chen",
+      "category": "Data Science",
+      "thumbnail": "https://images.unsplash.com/photo-1660616246653-e2c57d1077b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxweXRob24lMjBwcm9ncmFtbWluZyUyMGRhdGElMjBzY2llbmNlfGVufDF8fHx8MTc3MzczMDYzOHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "duration": "38 hours",
+      "rating": 4.9,
+      "studentsEnrolled": 8920,
+      "modules": "[{\"id\":\"m_1775725370704\",\"title\":\"Introduction to Python with Data Science\",\"lessons\":[{\"id\":\"l_1775725397670\",\"title\":\"Zero to Hero Data Science with Python\",\"duration\":\"11:25:17\",\"videoUrl\":\"https://youtu.be/Q4ap8MXd4T4?si=Gm2EL9LbO2FVIb4d\",\"isLocked\":true}]}]"
+    },
+    {
+      "id": "1775725458473",
+      "title": "Digital Marketing Masterclass",
+      "description": "Complete guide to digital marketing including SEO, social media marketing, content marketing, email marketing, and analytics. Grow your business online.",
+      "price": 3999,
+      "instructor": "Emily Rodriguez",
+      "category": "Marketing",
+      "thumbnail": "https://images.unsplash.com/photo-1542744095-291d1f67b221?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkaWdpdGFsJTIwbWFya2V0aW5nJTIwYnVzaW5lc3MlMjBsYXB0b3B8ZW58MXx8fHwxNzczNzMwNjM5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "duration": "32 hours",
+      "rating": 4.7,
+      "studentsEnrolled": 15630,
+      "modules": "[{\"id\":\"m_1775725479102\",\"title\":\"Beginning of Digital Marketing\",\"lessons\":[{\"id\":\"l_1775725512436\",\"title\":\"How to became a digital marketer\",\"duration\":\"7:23\",\"videoUrl\":\"https://youtu.be/RPw51rZwKkM?si=FB1sHILLmb2gE_9D\",\"isLocked\":true},{\"id\":\"l_1775725596433\",\"title\":\"What is Digital Marketing\",\"duration\":\"23:38\",\"videoUrl\":\"https://youtu.be/s7sUDQni0LI?si=JbwLOjbghtpwiu_1\",\"isLocked\":true},{\"id\":\"l_1775725625466\",\"title\":\"Top 50 Digital Marketing Q&A\",\"duration\":\"45:33\",\"videoUrl\":\"https://youtu.be/5Q7xmmzHV8k?si=EUp7v-tF0hTaDXzK\",\"isLocked\":true}]}]"
+    },
+    {
+      "id": "1775725699220",
+      "title": "UI/UX Design Complete Course",
+      "description": "Learn user interface and user experience design from basics to advanced. Master Figma, design systems, prototyping, and user research.",
+      "price": 4499,
+      "instructor": "Alex Turner",
+      "category": "Design",
+      "thumbnail": "https://images.unsplash.com/photo-1622117515670-fcb02499491f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx1aSUyMHV4JTIwZGVzaWduJTIwd2lyZWZyYW1lfGVufDF8fHx8MTc3MzcyNDY0OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "duration": "36 hours",
+      "rating": 4.8,
+      "studentsEnrolled": 9350,
+      "modules": "[{\"id\":\"m_1775725715716\",\"title\":\"Full Crash Course\",\"lessons\":[{\"id\":\"l_1775725741331\",\"title\":\"UI UX one Shot\",\"duration\":\"10:55:52\",\"videoUrl\":\"https://youtu.be/MBblN98-5lg?si=3tsSlCWdpG90Jt-r\",\"isLocked\":true}]}]"
+    },
+    {
+      "id": "1775725863788",
+      "title": "Mobile App Development with React Native",
+      "description": "Build native mobile apps for iOS and Android using React Native. Learn navigation, state management, APIs, and publish your apps to app stores.",
+      "price": 5999,
+      "instructor": "James Wilson",
+      "category": "Mobile Development",
+      "thumbnail": "https://images.unsplash.com/photo-1646737554389-49329965ef01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2JpbGUlMjBhcHAlMjBkZXZlbG9wbWVudCUyMHNtYXJ0cGhvbmV8ZW58MXx8fHwxNzczNjMxMzEyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "duration": "40 hours",
+      "rating": 4.6,
+      "studentsEnrolled": 6750,
+      "modules": "[{\"id\":\"m_1775725875180\",\"title\":\"Complete Android ReactNative\",\"lessons\":[{\"id\":\"l_1775725948446\",\"title\":\"One shot\",\"duration\":\"28:22:44\",\"videoUrl\":\"https://youtu.be/q3HE1dFiJBI?si=O9i97U1VZR1wn-L9\",\"isLocked\":true}]}]"
+    },
+    {
+      "id": "1775726033464",
+      "title": "Cloud Computing with AWS",
+      "description": "Master Amazon Web Services (AWS) cloud platform. Learn EC2, S3, Lambda, RDS, and more. Prepare for AWS certification.",
+      "price": 6499,
+      "instructor": "David Park",
+      "category": "Cloud Computing",
+      "thumbnail": "https://images.unsplash.com/photo-1744868562210-fffb7fa882d9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjbG91ZCUyMGNvbXB1dGluZyUyMHNlcnZlciUyMHRlY2hub2xvZ3l8ZW58MXx8fHwxNzczNjUwNjAyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "duration": "45 hours",
+      "rating": 4.9,
+      "studentsEnrolled": 5420,
+      "modules": "[{\"id\":\"m_1775726049596\",\"title\":\"What is AWS?\",\"lessons\":[{\"id\":\"l_1775726069562\",\"title\":\"Amazon Web Services\",\"duration\":\"6:31\",\"videoUrl\":\"https://youtu.be/7RlkluG6W58?si=Kmik6ujL0QVkv43f\",\"isLocked\":true}]},{\"id\":\"m_1775726094927\",\"title\":\"Basics of AWS\",\"lessons\":[{\"id\":\"l_1775726142613\",\"title\":\"AWS S3 Simple Storage Service\",\"duration\":\"31:00\",\"videoUrl\":\"https://youtu.be/d8A8JmAImc4?si=IgKR2plPFkeffQhO\",\"isLocked\":true},{\"id\":\"l_1775726168293\",\"title\":\"Amazon EC2 Elastic Cloud Service\",\"duration\":\"20:54\",\"videoUrl\":\"https://youtu.be/-FKQwXtrSSQ?si=i8RNT4eg3cEJeMyt\",\"isLocked\":true}]}]"
+    }
+  ]
+}
