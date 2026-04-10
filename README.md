@@ -174,6 +174,12 @@ POST /users
 GET /enrollments/:userId
 POST /enrollments
 ```
+### RozarPay
+
+```
+POST /create-order
+POST /verify
+```
 
 ### Payments
 
