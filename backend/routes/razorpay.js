@@ -5,9 +5,11 @@ const db = require("../db");
 
 const router = express.Router();
 
+require("dotenv").config();
+
 const razorpay = new Razorpay({
-  key_id: "rzp_test_SbQVicrIicuy82",
-  key_secret: "aTZvsNM5K8T9dGqa6kZB3oHJ",
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
 /* CREATE ORDER */
