@@ -74,33 +74,43 @@ SQLite Database
 learnhub
 │
 ├── frontend
-│   ├── src
-│   │   ├── app
-│   │   │   ├── pages
-│   │   │   │   ├── Home.tsx
-│   │   │   │   ├── CourseList.tsx
-│   │   │   │   ├── CoursePlayer.tsx
-│   │   │   │   └── StudentDashboard.tsx
-│   │   │   │
-│   │   │   ├── hooks
-│   │   │   │   └── useRealtimeData.ts
-│   │   │   │
-│   │   │   ├── services
-│   │   │   │   └── DataService.ts
-│   │   │   │
-│   │   │   └── context
-│   │   │       └── AuthContext.tsx
+│   ├── src
+│   │   ├── app
+│   │   │   ├── pages
+│   │   │   │   ├── Home.tsx
+│   │   │   │   ├── CourseList.tsx
+│   │   │   │   ├── CourseDetails.tsx
+│   │   │   │   ├── CoursePlayer.tsx
+│   │   │   │   ├── AdminDashboard.tsx
+│   │   │   │   ├── Login/Signup.tsx
+│   │   │   │   ├── Checkout.tsx
+│   │   │   │   └── StudentDashboard.tsx
+│   │   │   │
+│   │   │   ├── hooks
+│   │   │   │   ├── useProgress.ts
+│   │   │   │   └── useRealtimeData.ts
+│   │   │   │
+│   │   │   ├── services
+│   │   │   │   └── DataService.ts
+│   │   │   │
+│   │   │   │── utils
+│   │   │   |   └── generateCertificate.ts
+│   │   │   │
+│   │   │   └── context
+│   │   │       └── AuthContext.tsx
 │
 ├── backend
-│   ├── server.js
-│   ├── db.js
-│   ├── lms.db
-│   └── routes
-│       ├── courses.js
-│       ├── users.js
-│       ├── enrollments.js
-│       ├── payments.js
-│       └── progress.js
+│   ├── server.js
+│   ├── db.js
+│   ├── lms.db
+│   └── routes
+│       ├── courses.js
+│       ├── users.js
+│       ├── enrollments.js
+│       ├── payments.js
+│       ├── razorpay.js
+│       └── progress.js
+
 ```
 
 # Installation
