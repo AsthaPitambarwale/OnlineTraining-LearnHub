@@ -9,23 +9,24 @@ const enrollments = require("./routes/enrollments");
 const payments = require("./routes/payments");
 const progress = require("./routes/progress");
 const razorpay = require("./routes/razorpay");
+
 const seedData = require("./seedData.json");
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-/* AUTO SEED DATABASE */
+/* ✅ AUTO SEED DATABASE */
 
-db.serialize(() => {
-
+try {
   const insertCourse = db.prepare(`
-  INSERT OR IGNORE INTO courses
-  (id,title,description,price,instructor,category,thumbnail,duration,rating,studentsEnrolled,modules)
-  VALUES (?,?,?,?,?,?,?,?,?,?,?)
+    INSERT OR IGNORE INTO courses
+    (id,title,description,price,instructor,category,thumbnail,duration,rating,studentsEnrolled,modules)
+    VALUES (?,?,?,?,?,?,?,?,?,?,?)
   `);
 
-  seedData.courses.forEach(course => {
+  seedData.courses.forEach((course) => {
     insertCourse.run(
       course.id,
       course.title,
@@ -41,9 +42,11 @@ db.serialize(() => {
     );
   });
 
-  console.log("Database seeded successfully");
+  console.log("✅ Database seeded successfully");
+} catch (err) {
+  console.error("❌ Seeding error:", err.message);
+}
 
-});
 /* ROUTES */
 
 app.use("/courses", courses);
@@ -53,40 +56,30 @@ app.use("/payments", payments);
 app.use("/progress", progress);
 app.use("/razorpay", razorpay);
 
-/* DEBUG ROUTE */
+/* ✅ DEBUG ROUTE */
 
 app.get("/debug", (req, res) => {
+  try {
+    const coursesData = db.prepare("SELECT * FROM courses").all();
+    const usersData = db.prepare("SELECT * FROM users").all();
+    const paymentsData = db.prepare("SELECT * FROM payments").all();
+    const enrollmentsData = db.prepare("SELECT * FROM enrollments").all();
 
-  db.all("SELECT * FROM courses", (e1, courses) => {
-
-    db.all("SELECT * FROM users", (e2, users) => {
-
-      db.all("SELECT * FROM payments", (e3, payments) => {
-
-        db.all("SELECT * FROM enrollments", (e4, enrollments) => {
-
-          res.json({
-            courses,
-            users,
-            payments,
-            enrollments
-          });
-
-        });
-
-      });
-
+    res.json({
+      courses: coursesData,
+      users: usersData,
+      payments: paymentsData,
+      enrollments: enrollmentsData,
     });
-
-  });
-
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 /* SERVER */
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Backend running on port ${PORT}`);
+  console.log(`🚀 Backend running on port ${PORT}`);
 });
-
