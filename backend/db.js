@@ -1,19 +1,14 @@
-const sqlite3 = require("sqlite3").verbose();
+const Database = require("better-sqlite3");
 
-const db = new sqlite3.Database("./lms.db", (err) => {
-  if (err) {
-    console.error("Database connection error:", err.message);
-  } else {
-    console.log("Connected to SQLite database");
-  }
-});
+// Create / connect DB
+const db = new Database("lms.db");
 
-/* Enable foreign keys */
-db.run("PRAGMA foreign_keys = ON");
+// Enable foreign keys
+db.exec("PRAGMA foreign_keys = ON");
 
-db.serialize(() => {
+try {
   /* COURSES TABLE */
-  db.run(`
+  db.exec(`
     CREATE TABLE IF NOT EXISTS courses(
       id TEXT PRIMARY KEY,
       title TEXT NOT NULL,
@@ -26,22 +21,22 @@ db.serialize(() => {
       rating REAL DEFAULT 0,
       studentsEnrolled INTEGER DEFAULT 0,
       modules TEXT DEFAULT '[]'
-    )
+    );
   `);
 
   /* USERS TABLE */
-  db.run(`
+  db.exec(`
     CREATE TABLE IF NOT EXISTS users(
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
       email TEXT NOT NULL UNIQUE,
       password TEXT,
       role TEXT NOT NULL DEFAULT 'student'
-    )
+    );
   `);
 
   /* ENROLLMENTS TABLE */
-  db.run(`
+  db.exec(`
     CREATE TABLE IF NOT EXISTS enrollments(
       userId TEXT NOT NULL,
       courseId TEXT NOT NULL,
@@ -49,11 +44,11 @@ db.serialize(() => {
 
       FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
       FOREIGN KEY (courseId) REFERENCES courses(id) ON DELETE CASCADE
-    )
+    );
   `);
 
   /* PAYMENTS TABLE */
-  db.run(`
+  db.exec(`
     CREATE TABLE IF NOT EXISTS payments(
       id TEXT PRIMARY KEY,
       userId TEXT NOT NULL,
@@ -66,27 +61,31 @@ db.serialize(() => {
 
       FOREIGN KEY (userId) REFERENCES users(id),
       FOREIGN KEY (courseId) REFERENCES courses(id)
-    )
-  `);
-
-  /* PROGRESS TABLE */
-  db.run(`
-    CREATE TABLE IF NOT EXISTS progress (
-    userId TEXT,
-    courseId TEXT,
-    completedLessons TEXT,
-    lastAccessedLesson TEXT,
-    lastAccessedAt TEXT,
-    completedAt TEXT
     );
   `);
 
-  /* INDEXES FOR PERFORMANCE */
-  db.run(`CREATE INDEX IF NOT EXISTS idx_course_category ON courses(category)`);
-  db.run(`CREATE INDEX IF NOT EXISTS idx_payments_user ON payments(userId)`);
-  db.run(
-    `CREATE INDEX IF NOT EXISTS idx_enrollments_user ON enrollments(userId)`,
-  );
-});
+  /* PROGRESS TABLE */
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS progress (
+      userId TEXT,
+      courseId TEXT,
+      completedLessons TEXT,
+      lastAccessedLesson TEXT,
+      lastAccessedAt TEXT,
+      completedAt TEXT
+    );
+  `);
+
+  /* INDEXES */
+  db.exec(`
+    CREATE INDEX IF NOT EXISTS idx_course_category ON courses(category);
+    CREATE INDEX IF NOT EXISTS idx_payments_user ON payments(userId);
+    CREATE INDEX IF NOT EXISTS idx_enrollments_user ON enrollments(userId);
+  `);
+
+  console.log("✅ Database connected & initialized");
+} catch (err) {
+  console.error("❌ DB Error:", err.message);
+}
 
 module.exports = db;
