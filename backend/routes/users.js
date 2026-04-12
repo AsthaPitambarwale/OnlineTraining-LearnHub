@@ -1,75 +1,51 @@
-const express = require("express")
-const router = express.Router()
-const db = require("../db")
+const express = require("express");
+const router = express.Router();
+const db = require("../db");
 
 /* GET USERS */
 router.get("/", (req, res) => {
+  try {
+    const rows = db.prepare(`
+      SELECT 
+        users.*,
+        COUNT(enrollments.courseId) AS courses
+      FROM users
+      LEFT JOIN enrollments
+        ON users.id = enrollments.userId
+      GROUP BY users.id
+    `).all();
 
-  const query = `
-    SELECT 
-      users.*,
-      COUNT(enrollments.courseId) AS courses
-    FROM users
-    LEFT JOIN enrollments
-      ON users.id = enrollments.userId
-    GROUP BY users.id
-  `
-
-  db.all(query, [], (err, rows) => {
-
-    if (err) return res.status(500).json({ error: err.message })
-
-    res.json(rows)
-
-  })
-
-})
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 /* CREATE USER */
 router.post("/", (req, res) => {
+  const { name, email, password, role } = req.body;
 
-  const { name, email, password, role } = req.body
+  const id = Date.now().toString();
 
-  if (!name || !email || !password) {
-    return res.status(400).json({ error: "Name, email and password required" })
+  try {
+    db.prepare(
+      "INSERT INTO users (id,name,email,password,role) VALUES(?,?,?,?,?)"
+    ).run(id, name, email, password, role || "student");
+
+    res.json({ id, name, email, role: role || "student" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
-
-  const id = Date.now().toString()
-
-  db.run(
-    "INSERT INTO users (id,name,email,password,role) VALUES(?,?,?,?,?)",
-    [id, name, email, password, role || "student"],
-    function (err) {
-
-      if (err) return res.status(500).json({ error: err.message })
-
-      res.json({
-        id,
-        name,
-        email,
-        role: role || "student"
-      })
-
-    }
-  )
-
-})
+});
 
 /* DELETE USER */
 router.delete("/:id", (req, res) => {
+  try {
+    db.prepare("DELETE FROM users WHERE id=?").run(req.params.id);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
-  db.run(
-    "DELETE FROM users WHERE id=?",
-    [req.params.id],
-    function (err) {
-
-      if (err) return res.status(500).json({ error: err.message })
-
-      res.json({ success: true })
-
-    }
-  )
-
-})
-
-module.exports = router
+module.exports = router;

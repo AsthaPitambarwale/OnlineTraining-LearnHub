@@ -1,54 +1,37 @@
-const express = require("express")
-const router = express.Router()
-const db = require("../db")
+const express = require("express");
+const router = express.Router();
+const db = require("../db");
 
 /* GET USER ENROLLMENTS */
 router.get("/:userId", (req, res) => {
+  try {
+    const rows = db
+      .prepare("SELECT userId, courseId FROM enrollments WHERE userId=?")
+      .all(req.params.userId);
 
-  db.all(
-    "SELECT userId, courseId FROM enrollments WHERE userId=?",
-    [req.params.userId],
-    (err, rows) => {
-
-      if (err) {
-        return res.status(500).json({ error: err.message })
-      }
-
-      res.json(rows)
-
-    }
-  )
-
-})
-
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 /* CREATE ENROLLMENT */
 router.post("/", (req, res) => {
-
-  const { userId, courseId } = req.body
+  const { userId, courseId } = req.body;
 
   if (!userId || !courseId) {
-    return res.status(400).json({ error: "Missing enrollment data" })
+    return res.status(400).json({ error: "Missing enrollment data" });
   }
 
-  db.run(
-    "INSERT OR IGNORE INTO enrollments (userId,courseId) VALUES(?,?)",
-    [userId, courseId],
-    function (err) {
+  try {
+    db.prepare(
+      "INSERT OR IGNORE INTO enrollments (userId,courseId) VALUES(?,?)"
+    ).run(userId, courseId);
 
-      if (err) {
-        return res.status(500).json({ error: err.message })
-      }
+    res.json({ success: true, userId, courseId });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
-      res.json({
-        success: true,
-        userId,
-        courseId
-      })
-
-    }
-  )
-
-})
-
-module.exports = router
+module.exports = router;

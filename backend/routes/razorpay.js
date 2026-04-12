@@ -5,7 +5,10 @@ const db = require("../db");
 
 const router = express.Router();
 
-require("dotenv").config();
+// ⚠️ DO NOT use dotenv in production like this
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -13,7 +16,6 @@ const razorpay = new Razorpay({
 });
 
 /* CREATE ORDER */
-
 router.post("/create-order", async (req, res) => {
   try {
     const { amount } = req.body;
@@ -26,64 +28,66 @@ router.post("/create-order", async (req, res) => {
 
     res.json(order);
   } catch (err) {
-    console.error(err);
+    console.error("Order error:", err);
     res.status(500).json({ error: "Order creation failed" });
   }
 });
 
 /* VERIFY PAYMENT */
-
 router.post("/verify", (req, res) => {
-  console.log("VERIFY API HIT");
+  try {
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      userId,
+      courseId,
+      userName,
+      courseTitle,
+      amount,
+    } = req.body;
 
-  const {
-    razorpay_order_id,
-    razorpay_payment_id,
-    razorpay_signature,
-    userId,
-    courseId,
-    userName,
-    courseTitle,
-    amount,
-  } = req.body;
+    const sign = razorpay_order_id + "|" + razorpay_payment_id;
 
-  console.log("DATA RECEIVED:", req.body);
+    const expected = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(sign)
+      .digest("hex");
 
-  const sign = razorpay_order_id + "|" + razorpay_payment_id;
+    if (expected !== razorpay_signature) {
+      return res.status(400).json({ success: false });
+    }
 
-  const expected = crypto
-    .createHmac("sha256",process.env.RAZORPAY_KEY_SECRET)
-    .update(sign)
-    .digest("hex");
+    const id = Date.now().toString();
+    const date = new Date().toISOString().slice(0, 10);
 
-  console.log("EXPECTED:", expected);
-  console.log("ACTUAL:", razorpay_signature);
+    // ✅ Save payment
+    db.prepare(`
+      INSERT INTO payments
+      (id,userId,userName,courseId,courseTitle,amount,date,status)
+      VALUES(?,?,?,?,?,?,?,?)
+    `).run(
+      id,
+      userId,
+      userName,
+      courseId,
+      courseTitle,
+      amount,
+      date,
+      "completed"
+    );
 
-  if (expected !== razorpay_signature) {
-    console.log("❌ SIGNATURE FAILED");
-    return res.status(400).json({ success: false });
+    // ✅ Enroll user
+    db.prepare(`
+      INSERT OR IGNORE INTO enrollments (userId,courseId)
+      VALUES (?,?)
+    `).run(userId, courseId);
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("VERIFY error:", err);
+    res.status(500).json({ error: err.message });
   }
-
-  console.log("✅ SIGNATURE VERIFIED");
-
-  const id = Date.now().toString();
-  const date = new Date().toISOString().slice(0, 10);
-
-  db.run(
-    `INSERT INTO payments
-    (id,userId,userName,courseId,courseTitle,amount,date,status)
-    VALUES(?,?,?,?,?,?,?,?)`,
-    [id, userId, userName, courseId, courseTitle, amount, date, "completed"],
-  );
-
-  db.run("INSERT OR IGNORE INTO enrollments (userId,courseId) VALUES(?,?)", [
-    userId,
-    courseId,
-  ]);
-
-  console.log("✅ PAYMENT + ENROLLMENT SAVED");
-
-  res.json({ success: true });
 });
 
 module.exports = router;
