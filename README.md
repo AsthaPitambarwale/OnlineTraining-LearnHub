@@ -158,7 +158,7 @@ node server.js
 Backend runs on:
 
 ```
-http://localhost:5000
+${import.meta.env.VITE_API_URL}
 ```
 
 
@@ -276,7 +276,7 @@ This returns data from multiple tables in a single response.
 
 Example:
 
-```http://localhost:5000/debug```
+```${import.meta.env.VITE_API_URL}/debug```
 
 Example response:
 

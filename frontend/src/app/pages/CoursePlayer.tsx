@@ -96,7 +96,7 @@ export function CoursePlayer() {
       await progress.markLessonComplete(course.id, selectedLesson);
 
       // 🔥 SAVE WATCH TIME
-      await fetch("http://localhost:5000/progress/watch-time", {
+      await fetch("${import.meta.env.VITE_API_URL}/progress/watch-time", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

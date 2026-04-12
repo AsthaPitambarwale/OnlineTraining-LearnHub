@@ -70,7 +70,7 @@ export function Checkout() {
     try {
       // ✅ Create Order
       const orderRes = await fetch(
-        "http://localhost:5000/razorpay/create-order",
+        "${import.meta.env.VITE_API_URL}/razorpay/create-order",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -98,7 +98,7 @@ export function Checkout() {
           try {
             // ✅ Verify Payment
             const verify = await fetch(
-              "http://localhost:5000/razorpay/verify",
+              "${import.meta.env.VITE_API_URL}/razorpay/verify",
               {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
