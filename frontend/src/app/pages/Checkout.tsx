@@ -63,95 +63,107 @@ export function Checkout() {
   const total = course.price + gst;
 
   const handleRazorpayPayment = async () => {
-    if (loading) return;
+  if (loading) return;
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      // ✅ Create Order
-      const orderRes = await fetch(
-        "${import.meta.env.VITE_API_URL}/razorpay/create-order",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            amount: total,
-          }),
-        },
-      );
-
-      const order = await orderRes.json();
-
-      if (!order.id) {
-        throw new Error("Order creation failed");
+  try {
+    // ✅ CREATE ORDER (FIXED)
+    const orderRes = await fetch(
+      `${import.meta.env.VITE_API_URL}/razorpay/create-order`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: total,
+        }),
       }
+    );
 
-      const options = {
-        key: "rzp_test_SbQVicrIicuy82",
-        amount: order.amount,
-        currency: "INR",
-        name: "LearnHub",
-        description: course.title,
-        order_id: order.id,
-
-        handler: async function (response: any) {
-          try {
-            // ✅ Verify Payment
-            const verify = await fetch(
-              "${import.meta.env.VITE_API_URL}/razorpay/verify",
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  razorpay_order_id: response.razorpay_order_id,
-                  razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_signature: response.razorpay_signature,
-                  userId: user.id,
-                  userName: user.name,
-                  courseId: course.id,
-                  courseTitle: course.title,
-                  amount: total,
-                }),
-              },
-            );
-
-            const data = await verify.json();
-
-            if (data.success) {
-              purchaseCourse(course.id);
-
-              toast.success("Payment successful!");
-
-              navigate(`/learn/${course.id}`);
-            } else {
-              toast.error("Payment verification failed");
-            }
-          } catch (err) {
-            console.error(err);
-            toast.error("Verification failed");
-          }
-        },
-
-        prefill: {
-          name: user.name,
-          email: user.email,
-        },
-
-        theme: {
-          color: "#2563eb",
-        },
-      };
-
-      const razor = new (window as any).Razorpay(options);
-      razor.open();
-    } catch (err) {
-      console.error(err);
-      toast.error("Payment failed");
+    // ✅ SAFE JSON HANDLING
+    if (!orderRes.ok) {
+      const text = await orderRes.text();
+      console.error("Order API error:", text);
+      throw new Error("Order creation failed");
     }
 
-    setLoading(false);
-  };
+    const order = await orderRes.json();
 
+    if (!order.id) {
+      throw new Error("Order creation failed");
+    }
+
+    const options = {
+      key: "rzp_test_SbQVicrIicuy82",
+      amount: order.amount,
+      currency: "INR",
+      name: "LearnHub",
+      description: course.title,
+      order_id: order.id,
+
+      handler: async function (response: any) {
+        try {
+          // ✅ VERIFY PAYMENT (FIXED)
+          const verify = await fetch(
+            `${import.meta.env.VITE_API_URL}/razorpay/verify`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                userId: user.id,
+                userName: user.name,
+                courseId: course.id,
+                courseTitle: course.title,
+                amount: total,
+              }),
+            }
+          );
+
+          if (!verify.ok) {
+            const text = await verify.text();
+            console.error("Verify API error:", text);
+            throw new Error("Verification failed");
+          }
+
+          const data = await verify.json();
+
+          if (data.success) {
+            purchaseCourse(course.id);
+
+            toast.success("Payment successful!");
+
+            navigate(`/learn/${course.id}`);
+          } else {
+            toast.error("Payment verification failed");
+          }
+        } catch (err) {
+          console.error(err);
+          toast.error("Verification failed");
+        }
+      },
+
+      prefill: {
+        name: user.name,
+        email: user.email,
+      },
+
+      theme: {
+        color: "#2563eb",
+      },
+    };
+
+    const razor = new (window as any).Razorpay(options);
+    razor.open();
+  } catch (err) {
+    console.error(err);
+    toast.error("Payment failed");
+  }
+
+  setLoading(false);
+};
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-6xl mx-auto px-4">
