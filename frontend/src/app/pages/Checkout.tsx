@@ -70,15 +70,15 @@ export function Checkout() {
   try {
     // ✅ CREATE ORDER (FIXED)
     const orderRes = await fetch(
-      `${import.meta.env.VITE_API_URL}/razorpay/create-order`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: total,
-        }),
-      }
-    );
+  `${import.meta.env.VITE_API_URL}/api/razorpay/create-order`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ amount: total }),
+  }
+);
 
     // ✅ SAFE JSON HANDLING
     if (!orderRes.ok) {
