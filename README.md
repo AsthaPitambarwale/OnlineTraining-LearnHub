@@ -142,6 +142,11 @@ Frontend runs on:
 http://localhost:5173
 ```
 
+Create the env file: 
+VITE_API_URL= backend-route
+
+Note: Checkout.tsx contains test key of razorpay that should be same from backend.
+
 ## Install Backend
 
 ```
@@ -160,7 +165,12 @@ Backend runs on:
 ```
 ${import.meta.env.VITE_API_URL}
 ```
+Create the env file: 
+RAZORPAY_KEY_ID=rzp_test_yourkey
+RAZORPAY_KEY_SECRET=your-secret-key
+FRONTEND_URL=you-frontend-url
 
+Note: In frontend/src/pages/Checkout.tsx contains test key of razorpay that should be same from backend.
 
 # API Endpoints
 
