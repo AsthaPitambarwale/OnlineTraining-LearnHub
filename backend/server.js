@@ -54,7 +54,7 @@ app.use("/users", users);
 app.use("/enrollments", enrollments);
 app.use("/payments", payments);
 app.use("/progress", progress);
-app.use("api/razorpay", razorpay);
+app.use("/api/razorpay", razorpay);
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,
