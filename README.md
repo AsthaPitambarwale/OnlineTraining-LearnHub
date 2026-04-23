@@ -170,7 +170,7 @@ RAZORPAY_KEY_ID=rzp_test_yourkey
 RAZORPAY_KEY_SECRET=your-secret-key
 FRONTEND_URL=you-frontend-url
 
-Note: In frontend/src/pages/Checkout.tsx contains test key of razorpay that should be same from backend.
+Note: In frontend/src/app/pages/Checkout.tsx contains test key of razorpay that should be same from backend.
 
 # API Endpoints
 
