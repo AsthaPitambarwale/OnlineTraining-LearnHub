@@ -68,15 +68,17 @@ export function Checkout() {
   setLoading(true);
 
   try {
-    // ✅ CREATE ORDER (FIXED)
-    const orderRes = await fetch(
+    // ✅ CREATE ORDER 
+const orderRes = await fetch(
   `${import.meta.env.VITE_API_URL}/api/razorpay/create-order`,
   {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ amount: total }),
+    body: JSON.stringify({
+      amount: total,
+    }),
   }
 );
 
@@ -103,7 +105,7 @@ export function Checkout() {
 
       handler: async function (response: any) {
         try {
-          // ✅ VERIFY PAYMENT (FIXED)
+          // ✅ VERIFY PAYMENT
 const verify = await fetch(
   `${import.meta.env.VITE_API_URL}/api/razorpay/verify`,
   {
