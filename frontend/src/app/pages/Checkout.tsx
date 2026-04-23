@@ -96,7 +96,7 @@ const orderRes = await fetch(
     }
 
     const options = {
-      key: "rzp_test_SbQVicrIicuy82",
+      key: "rzp_test_SgXqmZaJmeBdes",
       amount: order.amount,
       currency: "INR",
       name: "LearnHub",
